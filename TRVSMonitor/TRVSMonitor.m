@@ -1,6 +1,5 @@
 //
-//  TRVSXCTestAsync.m
-//  TRVSXCTestAsyncExample
+//  TRVSMonitor.m
 //
 //  Created by Travis Jeffery on 10/11/13.
 //  Copyright (c) 2013 Travis Jeffery. All rights reserved.
@@ -38,7 +37,7 @@
     return [self waitWithTimeout:0 signalHandler:handler];
 }
 
-- (BOOL)waitWithTimeout:(NSUInteger)timeout {
+- (BOOL)waitWithTimeout:(NSTimeInterval)timeout {
     return [self waitWithTimeout:timeout signalHandler:nil];
 }
 
@@ -47,7 +46,7 @@
 
     while (_signalsRemaining > 0) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:.1]];
-        if ([self didTimeOut:timeout fromStartDate:start]) {
+        if ([self _didTimeOut:timeout fromStartDate:start]) {
             [self reset];
             return NO;
         }
@@ -67,7 +66,7 @@
 
 #pragma mark - Private
 
-- (BOOL)didTimeOut:(NSTimeInterval)timeout fromStartDate:(NSDate *)startDate {
+- (BOOL)_didTimeOut:(NSTimeInterval)timeout fromStartDate:(NSDate *)startDate {
     return (timeout > 0 && [[NSDate date] timeIntervalSinceDate:startDate] > timeout);
 }
 
