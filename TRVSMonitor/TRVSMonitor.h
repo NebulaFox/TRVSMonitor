@@ -13,99 +13,60 @@ typedef void (^TRVSMonitorHandler)(TRVSMonitor *monitor);
 
 /// A synchronization construct with the ability to wait until signalled that a condition has been met.
 /**
- Can be used more than once
+ @note Can be used more than once
  */
 @interface TRVSMonitor : NSObject
 
+/// Creates an instance with expect signal count of 1
 /**
- Creates an instance of TRVSMonitor with `init`
- 
- @see init
- @see initWithExpectedSignalCount:
+ @returns an instance of TRVSMonitor
  */
 + (instancetype)monitor;
 
+/// Creates an instance with expected signal count of 1
 /**
- Calls `initWithExpectedSignalCount:` with `expectedSignalCount` being 1
- 
- @see monitor
- @see initWithExpectedSignalCount:
+ @returns an instance of TRVSMonitor
  */
 - (instancetype)init;
 
-/// Creates an instance with a given number of signal counts.
+/// Creates an instance with an expected signal count
 /**
- 
- @param expectedSignalCount the amount of `signal` calls it will `wait` for
- 
- @see monitor
- @see init
- @see wait
- @see waitWithTimeout:
- @see waitWithSignalHandler:
- @see waitWithTimeout:signalHandler:
- @see signal
+ @param expectedSignalCount the total amount of signals to be expected to be received
+ @returns an instance of TRVSMonitor
  */
 - (instancetype)initWithExpectedSignalCount:(NSInteger)expectedSignalCount;
 
-/// Waits for all expected amount of signals to be called
+/// Blocks the current thread until the expected amount of signals to be called
 /**
- @returns a boolean whether all signals were called
-
- @see signal
- @see waitWithTimeout:
- @see waitWithSignalHandler:
- @see waitWithTimeout:signalHandler:
+ @returns YES when all signals have be received
  */
 - (BOOL)wait;
 
-/// Waits for all expected amount of signals to be called or will timeout
+/// Blocks the current thread until expected amount of signals is received or certain amount of time has passed
 /**
  @param timeout an amount of time to wait in seconds
 
  @returns a boolean whether all signals were called
- 
- @see signal
- @see wait
- @see waitWithSignalHandler:
- @see waitWithTimeout:signalHandler:
  */
 - (BOOL)waitWithTimeout:(NSTimeInterval)timeout;
 
-/// Waits for all expected amount of signals to be called
+/// Blocks the current thread until the expected amount of signals is received
 /**
  @param handler a block that wil be called repeatably and passes in a `TRVSMonitor`
  
  @returns a boolean whether all signals were called
- 
- @see signal
- @see wait
- @see waitWithTimeout:
- @see waitWithTimeout:signalHandler:
  */
 - (BOOL)waitWithSignalHandler:(TRVSMonitorHandler)handler;
 
-/// Waits for all expected amount of signals to be called or will timeout
+/// Blocks the current thread until expected amount of signals is received or certain amount of time has passed
 /**
  @param timeout an amount of time to wait in seconds
  @param handler a block that wil be called repeatably and passes in a `TRVSMonitor`
  
  @returns a boolean whether all signals were called
- 
- @see signal
- @see wait
- @see waitWithTimeout:
- @see waitWithSignalHandler:
  */
 - (BOOL)waitWithTimeout:(NSTimeInterval)timeout signalHandler:(TRVSMonitorHandler)handler;
 
-/// Reduces the count of remaining signals
-/**
- @see initWithExpectedSignalCount:
- @see wait
- @see waitWithTimeout:
- @see waitWithSignalHandler:
- @see waitWithTimeout:signalHandler:
- */
+/// Fires a signal
 - (void)signal;
 @end
